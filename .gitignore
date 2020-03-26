@@ -50,3 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#CSS Specific Files/Folders
+.launches/
+.ccsproject
+.cproject
+.project
+.settings/
+Debug/
+targetConfigs/
