@@ -2,6 +2,9 @@
 #ifndef HEADER_H_
 #define HEADER_H_
 
+//Initial EEPROM Start
+//#define INITIAL_START
+
 //Header Files Include
 #include <stdbool.h>
 #include <stdint.h>
@@ -118,6 +121,8 @@ struct nonVolatileVariablesStruct
     int8_t temperatureInt[4]; // integrierte Temperatur
 
     uint32_t ticksFor100ml;
+
+    bool write_to_EEPROM;
 };
 enum DisplayStates
 {
@@ -175,7 +180,7 @@ void mv4On();
 
 //Display Funktionen
 void display_mainMenu(int Xcounter);
-void display_timeSetUp(int Ycounter, nonVolatileVariables *_EEPROMStorage, volatileVariables *_volatileStorage);
+void display_timeSetUp(int Ycounter, volatileVariables *_volatileStorage);
 void display_pumpCalibration(int Buttoncounter, nonVolatileVariables *_EEPROMStorage);
 void display_wateringAmounts(int Xcounter, nonVolatileVariables *_EEPROMStorage);
 void display_wateringInterval(int Xcounter, nonVolatileVariables *_EEPROMStorage);

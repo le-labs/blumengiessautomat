@@ -287,7 +287,7 @@ void display_mainMenu(int Ycounter)
 }
 
 
-void display_timeSetUp(int Xcounter, nonVolatileVariables *_EEPROMStorage, volatileVariables *_volatileStorage)
+void display_timeSetUp(int Xcounter, volatileVariables *_volatileStorage)
 {
     char strBuffer[30];                 // for sprintf()
 
@@ -834,6 +834,10 @@ void display_InfluenceTemperature(int Xcounter, nonVolatileVariables *_EEPROMSto
     int WMmax=500;
     int WMmin=0;
     float WMdelta=0.1;
+
+#ifdef ENABLE_DEBUG
+    printf("Temp AWA: %i", (int) _EEPROMStorage->temperatureAWA[0]);
+#endif
 
      if (Xcounter == 1)
      {

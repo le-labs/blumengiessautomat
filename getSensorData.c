@@ -91,10 +91,10 @@ void getHumidity(volatileVariables *_volatileStorage)
     }
     ADCSequenceDataGet(ADC0_BASE, 0, HumidityArray); //Sequence ändern in CH 3, CH2, CH1, CH0
 
-    _volatileStorage->SoilHumidity[3] = HumidityArray[0];
-    _volatileStorage->SoilHumidity[2] = HumidityArray[1];
-    _volatileStorage->SoilHumidity[1] = HumidityArray[2];
-    _volatileStorage->SoilHumidity[0] = HumidityArray[3];
+    _volatileStorage->SoilHumidity[3] = HumidityArray[4];
+    _volatileStorage->SoilHumidity[2] = HumidityArray[0];
+    _volatileStorage->SoilHumidity[1] = HumidityArray[1];
+    _volatileStorage->SoilHumidity[0] = HumidityArray[2];
 
-    _volatileStorage->waterLevel = HumidityArray[4];
+    _volatileStorage->waterLevel = HumidityArray[3];
 }

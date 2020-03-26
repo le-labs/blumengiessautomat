@@ -71,12 +71,27 @@ main (void)
   int i;			//counter for plant numbers
 
   nonVolatileVariables EEPROMStorage;
+  EEPROMStorage.write_to_EEPROM = false;
+
 
   setup (takt);
   getTime (&hr, &min, &s, &am_pm, hr_format);
   getHumidity (&volatileStorage);
   getTemperature (&volatileStorage);
   getExposure (&volatileStorage);
+
+  EEPROMRead ((uint32_t *) & EEPROMStorage, E2PROM_STRUCT_ADRESS, sizeof (EEPROMStorage));
+
+#ifdef INITIAL_START
+  int var;
+
+  for (var = 0; var < 5; ++var) {
+      EEPROMStorage.humidityAWA[var] = 10.0f;
+      EEPROMStorage.illuminanceAWA[var] = 10.0f;
+      EEPROMStorage.temperatureAWA[var] = 10.0f;
+  }
+#endif
+
 
   while (1)
     {
@@ -86,8 +101,8 @@ main (void)
 	  joystickWaitTime = 0;
 	}
 
-      EEPROMRead ((uint32_t *) & EEPROMStorage, E2PROM_STRUCT_ADRESS,
-		  sizeof (EEPROMStorage));
+
+
       pumpMvOff ();
 
       if (displayClear)
@@ -239,6 +254,11 @@ main (void)
 	      joystickYSelect (1, 9, 1, volatileStorage.mainMenuState, 7);
 	    display_mainMenu (volatileStorage.mainMenuState);
 
+	    if(EEPROMStorage.write_to_EEPROM){
+		      EEPROMProgram ((uint32_t *) & EEPROMStorage, E2PROM_STRUCT_ADRESS, sizeof (EEPROMStorage));	//Write struct to EEPROM start from 0x0000
+		      EEPROMStorage.write_to_EEPROM = false;
+	    }
+
 	    if (b1pressed ())
 	      {
 		displayState = volatileStorage.mainMenuState;
@@ -298,6 +318,7 @@ main (void)
 
 	    if (b2pressed ())
 	      {
+		EEPROMStorage.write_to_EEPROM = true;
 		displayState = MainMenu;
 		displayClear = 1;
 		b1_pressed = 0;
@@ -322,8 +343,7 @@ main (void)
 	    volatileStorage.selectTimeSetUp =
 	      joystickX (1, 2, 1, volatileStorage.selectTimeSetUp, 7);
 
-	    display_timeSetUp (volatileStorage.selectTimeSetUp,
-			       &EEPROMStorage, &volatileStorage);
+	    display_timeSetUp (volatileStorage.selectTimeSetUp, &volatileStorage);
 
 	    setTime ((char) volatileStorage.actual_h,
 		     (char) volatileStorage.actual_min, (char) 50, 1,
@@ -353,6 +373,7 @@ main (void)
 
 	    if (b2pressed ())
 	      {
+		EEPROMStorage.write_to_EEPROM = true;
 		displayState = MainMenu;
 		displayClear = 1;
 		b1_pressed = 0;
@@ -395,6 +416,7 @@ main (void)
 				       &EEPROMStorage);
 	    if (b2pressed ())
 	      {
+		EEPROMStorage.write_to_EEPROM = true;
 		displayState = MainMenu;
 		displayClear = 1;
 		b1_pressed = 0;
@@ -438,6 +460,7 @@ main (void)
 					  &EEPROMStorage);
 	    if (b2pressed ())
 	      {
+		EEPROMStorage.write_to_EEPROM = true;
 		displayState = MainMenu;
 		displayClear = 1;
 		b1_pressed = 0;
@@ -481,6 +504,7 @@ main (void)
 				       &EEPROMStorage);
 	    if (b2pressed ())
 	      {
+		EEPROMStorage.write_to_EEPROM = true;
 		displayState = MainMenu;
 		displayClear = 1;
 		b1_pressed = 0;
@@ -587,7 +611,6 @@ main (void)
 	    }
 	}
 
-      EEPROMProgram ((uint32_t *) & EEPROMStorage, E2PROM_STRUCT_ADRESS, sizeof (EEPROMStorage));	//Write struct to EEPROM start from 0x0000
     }
 }
 
