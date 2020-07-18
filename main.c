@@ -86,9 +86,9 @@ main (void)
   int var;
 
   for (var = 0; var < 5; ++var) {
-      EEPROMStorage.humidityAWA[var] = 10.0f;
-      EEPROMStorage.illuminanceAWA[var] = 10.0f;
-      EEPROMStorage.temperatureAWA[var] = 10.0f;
+      EEPROMStorage.humidityAWA[var] = 0.1f;
+      EEPROMStorage.illuminanceAWA[var] = 0.1f;
+      EEPROMStorage.temperatureAWA[var] = 0.1f;
   }
 #endif
 
@@ -554,6 +554,7 @@ main (void)
 	    b2_pressed = 0;
 	    break;
 	  }
+	  /*
 	case WaterLevelLow:
 	  {
 	    CFAF128128B0145T_text (1, 50, "Wasserlevel zu niedrig!",
@@ -565,6 +566,7 @@ main (void)
 	    sing (&volatileStorage);
 	    break;
 	  }
+	  */
 	default:
 	  {
 	    break;
@@ -585,6 +587,7 @@ main (void)
 	}
 
       //Water Level Check
+      /*
       if ((volatileStorage.waterLevel > 3800)
 	  && !(displayState == WaterLevelLow))
 	{
@@ -597,14 +600,14 @@ main (void)
 	  displayState = StartPage;
 	  displayClear = 1;
 	}
+       */
 
       //Watering
       else
 	{
 	  for (i = 0; i < 4; i++)
 	    {
-	      if ((volatileStorage.waterLevel <= 3800)
-		  && (EEPROMStorage.remainingTimeWatering[i] <= 0))
+	      if ((EEPROMStorage.remainingTimeWatering[i] <= 0))
 		{
 		  watering (i, &EEPROMStorage);
 		}
@@ -694,8 +697,7 @@ watering (int plant, nonVolatileVariables * _EEPROMStorage)
 	  mv4On ();
 	}
       pumpOn ();
-      while ((volatileStorage.waterLevel <= 3800)
-	     && (wateringTime > timeCounter) && (!b1_pressed))
+      while ((wateringTime > timeCounter) && (!b1_pressed))
 	{
 	  timeCounter++;
 	  SysCtlDelay (12000);
